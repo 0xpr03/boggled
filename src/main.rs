@@ -35,13 +35,14 @@ fn add_dict<W: Write>(path: &str, writer: &mut BufWriter<W>, first_entry: &mut b
     let mut removed: u64 = 0;
     for line_ in br.lines() {
         let line = line_?;
-        // don't add "word's"
-        if line.contains("'") {
-            removed += 1;
-            continue;
-        }
+        
         if *passed_copyright {
             total += 1;
+            // don't add "word's"
+            if line.contains("'") {
+                removed += 1;
+                continue;
+            }
             if *first_entry  {
                 write!(writer, "\"{}\"",line)?;
                 *first_entry = false;
